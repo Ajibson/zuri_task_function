@@ -1,21 +1,23 @@
 class Budget():
 
-    category_list = []
-    category_bank = {}
+    category_list = [] #List of categories
+    category_bank = {} #categories with balance pair
 
-
+    #default function call as the app opeens to create categories
     def __init__(self):
+        print("**********\tBudget App\t**********")
         number_of_categories = int(input("How many category do you wish to create: "))
         for i in range(1,number_of_categories+1):
-            input_category = input("Please input categories number %s: "%i)
+            input_category = input("\nPlease input categories name for number %s: "%i)
             self.category_list.append(input_category)
         for category in self.category_list:
             self.category_bank[category] = 0
         print("\n******** Categories created Successfullly ********\n")
-        self.action()
 
+        self.action()
+    #action function
     def action(self):
-        print("These are the availble actions that can be performed: ")
+        print("\nThese are the availble actions that can be performed: ")
         print("1 to Deposit to category")
         print("2 to Withdrawl from category")
         print("3 to Get category balance")
@@ -35,36 +37,43 @@ class Budget():
         else:
             self.action()
 
+    #Adding new category if needed apart from the ones created initiallly
     def add_category(self):
         category_name = input("Enter category name: ")
         self.category_bank[category_name] = 0
         print("Category added successfully")
         self.action()
+
+    #action call categories    
     def call_category(self,action):
         global selected_category
         if action == 'deposit':
             print('\nWhich category do you wish to deposit to: ')
             for category in self.category_list:
                 print(self.category_list.index(category) + 1, " " , category)
+            print("0 Main menu")
             try:
                 selected_category = int(input("Input valid option: "))
                 if selected_category > len(self.category_list) or selected_category < 0:
                     print("Invalid input")
                     self.call_category(action)
+                elif selected_category == 0:
+                    self.action()
                 else:
                     return selected_category
             except ValueError:
                 print("Digit input is required")
                 self.call_category(action)
         elif action == 'balance':
-            print("1. All Categories")
+            print("\n1. All Categories")
             print('2. A Category')
+            print("0 Main menu")
             try:
                 selected_input = int(input("Input Valid option: "))
                 if selected_input == 1:
-                    print('\nCategories        Balance')
+                    print('\nCategories\t\tBalance')
                     for category,balance in self.category_bank.items():
-                        print(category, '             ' , balance)
+                        print(category, '\t\t\t#' , balance)
                     self.action()
                 elif selected_input == 2:
                     for category in self.category_list:
@@ -72,11 +81,13 @@ class Budget():
                     try:
                         selected_category = int(input("Input valid option: "))
                         gotten_balance = self.category_bank[self.category_list[selected_category - 1]]
-                        print(self.category_list[selected_category - 1], ':  #' ,balance, '\n')
+                        print(self.category_list[selected_category - 1], ':  #' ,gotten_balance, '\n')
                         self.action()
-                    except ValueError:
-                        print("Digit input is required")
+                    except (ValueError,IndexError):
+                        print("Invalid Input detected")
                         self.call_category(action)
+                elif selected_input == 0:
+                    self.action()
 
             except ValueError:
                 print("Invalid input, Digit input is expected")
@@ -85,11 +96,14 @@ class Budget():
             print("\nWhich category do you want to withdrawl from: ")
             for category in self.category_list:
                 print(self.category_list.index(category) + 1, " for " , category)
+            print("0 Main menu")
             try:
                 selected_category = int(input("Input valid option: "))
                 if selected_category > len(self.category_list) or selected_category < 0:
                     print("Category does not exist\n")
                     self.call_category(action)
+                elif selected_category == 0:
+                    self.action()
                 else:
                     return selected_category
             except ValueError:
@@ -108,7 +122,7 @@ class Budget():
         print("Fund deposited successfully\n")
         print("************* Available Categories *************")
         for category,balance in self.category_bank.items():
-            print(category, ' ' , balance, '\n')
+            print(category, ' #' , balance, '\n')
         
         self.action()
     def withdrawl_fund(self):
@@ -123,13 +137,14 @@ class Budget():
             print("Fund withdrawl successfully\n")
             self.action()
         else:
-            print("Insufficient Fund\n")
+            print("\nInsufficient Fund\n")
             self.action()
 
     def balance_fund(self):
         self.call_category('balance')
 
     def transfer_fund(self):
+        print('\n')
         for category in self.category_list:
             print(self.category_list.index(category) + 1, " " , category)
         try:

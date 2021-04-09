@@ -1,18 +1,15 @@
-class Budget():
+class Budget:
 
     category_list = [] #List of categories
     category_bank = {} #categories with balance pair
 
     #default function call as the app opeens to create categories
-    def __init__(self):
+    def __init__(self, category):
         print("**********\tBudget App\t**********")
-        number_of_categories = int(input("How many category do you wish to create: "))
-        for i in range(1,number_of_categories+1):
-            input_category = input("\nPlease input categories name for number %s: "%i)
-            self.category_list.append(input_category)
+        self.category_list.append(category)
         for category in self.category_list:
             self.category_bank[category] = 0
-        print("\n******** Categories created Successfullly ********\n")
+        print("\n******** Category created Successfullly ********\n")
 
         self.action()
     #action function
@@ -23,18 +20,26 @@ class Budget():
         print("3 to Get category balance")
         print("4 to Transfer between category")
         print('5 to Add New Category')
-        selected_input = int(input("Enter valid option: "))
-        if selected_input == 1:
-            self.deposit_fund()
-        elif selected_input == 2:
-            self.withdrawl_fund()
-        elif selected_input == 3:
-            self.balance_fund()
-        elif selected_input == 4:
-            self.transfer_fund()
-        elif selected_input == 5:
-            self.add_category()
-        else:
+        print("0 to exit")
+        try:
+            selected_input = int(input("Enter valid option: "))
+            if selected_input == 1:
+                self.deposit_fund()
+            elif selected_input == 2:
+                self.withdrawl_fund()
+            elif selected_input == 3:
+                self.balance_fund()
+            elif selected_input == 4:
+                self.transfer_fund()
+            elif selected_input == 5:
+                self.add_category()
+            elif selected_input == 0:
+                print("Hope you had cool time using the app")
+                return ''
+            else:
+                self.action()
+        except ValueError:
+            print("\nNumber input is expected here\n")
             self.action()
 
     #Adding new category if needed apart from the ones created initiallly
@@ -165,4 +170,4 @@ class Budget():
 
 
 
-Budget()
+myapp = Budget("Food")
